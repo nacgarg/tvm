@@ -1248,3 +1248,14 @@ def SplitArgs(max_function_args):
         The registered pass for constant folding.
     """
     return _ffi_api.SplitArgs(max_function_args)
+
+def LowerSobel():
+    """
+    Lower Sobel operators to conv2d.
+
+    Returns
+    -------
+    ret : tvm.transform.Pass
+        The registered pass for Sobel lowering.
+    """
+    return _ffi_api.LowerSobel()

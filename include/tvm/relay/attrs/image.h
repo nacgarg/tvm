@@ -266,6 +266,92 @@ struct GridSampleAttrs : public tvm::AttrsNode<GridSampleAttrs> {
   }
 };
 
+/*! \brief Attributes used in Sobel edge detection operator */
+// Includes kernel size, border mode, scale, delta
+struct SobelAttrs : public tvm::AttrsNode<SobelAttrs> {
+  Array<IndexExpr> kernel_size;
+  IndexExpr channels;
+  std::string padding;
+  std::string data_layout;
+  DataType out_dtype;
+
+  TVM_DECLARE_ATTRS(SobelAttrs, "relay.attrs.SobelAttrs") {
+    TVM_ATTR_FIELD(kernel_size)
+        .set_default(Array<IndexExpr>({3, 3}))
+        .describe("The kernel size of the Sobel operator.");
+    TVM_ATTR_FIELD(padding).set_default("SAME").describe(
+        "Padding mode to use."
+        "Can be SAME or VALID");
+    TVM_ATTR_FIELD(data_layout)
+        .set_default("NCHW")
+        .describe(
+            "Dimension ordering of input data. Can be 'NCHW', 'NHWC', etc."
+            "'N', 'C', 'H', 'W' stands for batch, channel, height, and width"
+            "dimensions respectively. The data layout changes the way the"
+            "dimensions are interpreted.");
+    TVM_ATTR_FIELD(out_dtype)
+        .set_default(NullValue<DataType>())
+        .describe("Output data type, set to explicit type under mixed precision setting");
+    TVM_ATTR_FIELD(channels).set_default(NullValue<IndexExpr>()).describe("Number of channels.");
+  }
+};
+
+/*! \brief Attributes used in Gaussian blur operator */
+// Includes kernel size, border mode, scale, delta
+struct GaussianBlurAttrs : public tvm::AttrsNode<GaussianBlurAttrs> {
+  Array<IndexExpr> kernel_size;
+  double sigma;
+  int channels;
+  std::string padding;
+  std::string data_layout;
+  DataType out_dtype;
+
+  TVM_DECLARE_ATTRS(GaussianBlurAttrs, "relay.attrs.GaussianBlurAttrs") {
+    TVM_ATTR_FIELD(kernel_size)
+        .set_default(Array<IndexExpr>({3, 3}))
+        .describe("The kernel size of the Gaussian blur.");
+    TVM_ATTR_FIELD(sigma).set_default(1.f).describe("The sigma of the Gaussian blur.");
+    TVM_ATTR_FIELD(channels).set_default(3).describe(
+        "The number of channels of the Gaussian blur.");
+    TVM_ATTR_FIELD(padding).set_default("SAME").describe(
+        "Padding mode to use."
+        "Can be SAME or VALID");
+    TVM_ATTR_FIELD(data_layout)
+        .set_default("NCHW")
+        .describe(
+            "Dimension ordering of input data. Can be 'NCHW', 'NHWC', etc."
+            "'N', 'C', 'H', 'W' stands for batch, channel, height, and width"
+            "dimensions respectively. The data layout changes the way the"
+            "dimensions are interpreted.");
+    TVM_ATTR_FIELD(out_dtype)
+        .set_default(NullValue<DataType>())
+        .describe("Output data type, set to explicit type under mixed precision setting");
+  }
+};
+
+/* \brief Attributes used in ColorSpace operator */
+struct ColorSpaceAttrs : public tvm::AttrsNode<ColorSpaceAttrs> {
+    std::string data_layout;
+  DataType out_dtype;
+  std::string in_mode;
+  std::string out_mode;
+
+  TVM_DECLARE_ATTRS(ColorSpaceAttrs, "relay.attrs.ColorSpaceAttrs") {
+    TVM_ATTR_FIELD(out_dtype)
+        .set_default(NullValue<DataType>())
+        .describe("Output data type, set to explicit type under mixed precision setting");
+    TVM_ATTR_FIELD(in_mode).set_default("RGB").describe("Input color space mode.");
+    TVM_ATTR_FIELD(out_mode).set_default("RGB").describe("Output color space mode.");
+    TVM_ATTR_FIELD(data_layout)
+        .set_default("NCHW")
+        .describe(
+            "Dimension ordering of input data. Can be 'NCHW', 'NHWC', etc."
+            "'N', 'C', 'H', 'W' stands for batch, channel, height, and width"
+            "dimensions respectively. The data layout changes the way the"
+            "dimensions are interpreted.");
+  }
+};
+
 }  // namespace relay
 }  // namespace tvm
 #endif  // TVM_RELAY_ATTRS_IMAGE_H_

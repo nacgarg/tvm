@@ -503,6 +503,7 @@ class TypeInferencer : private ExprFunctor<Type(const Expr&)>,
 
     if (type_arity != number_of_args) {
       if (type_arity < number_of_args) {
+        std::cout << call->op << std::endl;
         this->EmitFatal(Diagnostic::Error(call->span)
                         << "the function is provided too many arguments "
                         << "expected " << type_arity << ", found " << number_of_args);

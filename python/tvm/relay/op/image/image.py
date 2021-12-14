@@ -434,3 +434,94 @@ def grid_sample(data, grid, method="bilinear", layout="NCHW"):
         4-D with shape [batch, 2, out_height, out_width]
     """
     return _make.grid_sample(data, grid, method, layout)
+
+# Sobel filter operator for edge detection
+# Input is data, kernel size, padding mode (SAME or VALID)
+def sobel(data, kernel_size=(3, 3), padding="SAME", layout="NCHW", out_dtype="float32"):
+    """Compute Sobel filter for edge detection.
+
+    Parameters
+    ----------
+    data : tvm.Tensor
+        4-D with shape [batch, channel, height, width]
+
+    kernel_size : int
+        The kernel size of sobel filter
+
+    padding : str
+        The padding algorithm type to use, "SAME" or "VALID".
+
+    layout : str
+        Layout of input data.
+
+    out_dtype : str
+        The output type. Should be ["int8", "uint8", "int32", "int64", "float32", "float64"].
+
+    Returns
+    -------
+    output : tvm.Tensor
+        The output tensor for sobel operator.
+    """
+    return _make.sobel(data, kernel_size, layout, padding, out_dtype)
+
+# Gaussian blur filter operator
+# Input is data, kernel size, sigma, channels, padding mode (SAME or VALID)
+def gaussian_blur(data, sigma=1.0, channels=3, padding="SAME", layout="NCHW",out_dtype="float32"):
+    """Compute Gaussian blur filter.
+
+    Parameters
+    ----------
+    data : tvm.Tensor
+        4-D with shape [batch, channel, height, width]
+
+    kernel_size : int
+        The kernel size of gaussian blur filter
+
+    sigma : float
+        The sigma of gaussian blur filter
+
+    channels : int
+        The channels of gaussian blur filter
+
+    padding : str
+        The padding algorithm type to use, "SAME" or "VALID".
+
+    layout : str
+        Layout of input data.
+
+    out_dtype : str
+        The output type. Should be ["int8", "uint8", "int32", "int64", "float32", "float64"].
+
+    Returns
+    -------
+    output : tvm.Tensor
+        The output tensor for gaussian blur operator.
+    """
+    kernel_size = (int(sigma)*4 + 1, int(sigma)*4 + 1)
+    return _make.gaussian_blur(data, sigma, channels, padding, layout, kernel_size, out_dtype)
+
+# Color space transform operator
+# Input is data, in color space, out color space
+def color_space(data, in_space, out_space, out_dtype="float32", layout="NCHW"):
+    """Compute color space transform.
+
+    Parameters
+    ----------
+    data : tvm.Tensor
+        4-D with shape [batch, channel, height, width]
+
+    in_space : str
+        The input color space.
+
+    out_space : str
+        The output color space.
+
+    layout : str
+        Layout of input data.
+
+    Returns
+    -------
+    output : tvm.Tensor
+        The output tensor for color space transform operator.
+    """
+    return _make.color_space(data, in_space, out_space, out_dtype, layout)
